@@ -13,36 +13,31 @@ export const activities = [
   `Sightseeing`,
   `Restaurant`,
 ];
-const offers = [
+export const offers = [
   {
     name: `Add luggage`,
     type: `luggage`,
     price: 10,
-    checked: true
   },
   {
     name: `Switch to comfort class`,
     type: `comfort`,
     price: 150,
-    checked: false
   },
   {
     name: `Add meal`,
     type: `meal`,
     price: 2,
-    checked: false
   },
   {
     name: `Choose seats`,
     type: `seats`,
     price: 9,
-    checked: true
   },
   {
     name: `Travel by train`,
     type: `train`,
     price: 40,
-    checked: true,
   },
 ];
 const sentences = [

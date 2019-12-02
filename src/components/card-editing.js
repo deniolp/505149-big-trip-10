@@ -1,9 +1,10 @@
 import moment from 'moment';
 
-import {transfers, activities, locations} from '../mock/card';
+import {transfers, activities, locations, offers} from '../mock/card';
 import getPrefix from '../utils';
 
 export const createEditCardTemplate = (card) => {
+  console.log(card.offers);
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
@@ -73,8 +74,8 @@ export const createEditCardTemplate = (card) => {
   <section class="event__section event__section--offers">
     <h3 class="event__section-title event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-      ${card.offers.map((item) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}"${item.checked ? ` checked` : ``}>
+      ${offers.map((item) => `<div class="event__offer-selector">
+      <input class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}"${card.offers.some((it) => it.type === item.type) ? ` checked` : ``}>
       <label class="event__offer-label" for="event-offer-${item.type}-1">
         <span class="event__offer-title">${item.name}</span>
         &plus;
