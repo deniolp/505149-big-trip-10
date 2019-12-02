@@ -32,4 +32,8 @@ render(daysElement, createDayTemplate());
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
 render(dayElement, createEditCardTemplate());
-new Array(CARDS_COUNT).fill(``).forEach(() => render(dayElement, createCardTemplate(generateCard())));
+const points = new Array(CARDS_COUNT).fill(``).map((point) => {
+  point = generateCard();
+  return point;
+}).slice().sort((a, b) => a.startDate - b.startDate);
+points.forEach((point) => render(dayElement, createCardTemplate(point)));
