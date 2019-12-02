@@ -16,6 +16,10 @@ const CARDS_COUNT = 3;
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);
 };
+const points = new Array(CARDS_COUNT).fill(``).map((point) => {
+  point = generateCard();
+  return point;
+});
 
 const infoElement = document.querySelector(`.trip-info`);
 const controlsElement = document.querySelector(`.trip-controls`);
@@ -28,12 +32,8 @@ render(eventsElement, createTripSortingTemplate());
 render(eventsElement, createDaysTemplate());
 
 const daysElement = eventsElement.querySelector(`.trip-days`);
-render(daysElement, createDayTemplate());
+render(daysElement, createDayTemplate(points[0].start));
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
-render(dayElement, createEditCardTemplate(generateCard()));
-const points = new Array(CARDS_COUNT).fill(``).map((point) => {
-  point = generateCard();
-  return point;
-}).slice().sort((a, b) => a.startDate - b.startDate);
 points.forEach((point) => render(dayElement, createCardTemplate(point)));
+render(dayElement, createEditCardTemplate(points[0]), `afterBegin`);

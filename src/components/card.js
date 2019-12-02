@@ -13,7 +13,7 @@ const getDiff = (time) => {
 };
 
 export const createCardTemplate = (card) => {
-  const diffTime = (card.endDate.getTime() - card.startDate.getTime());
+  const diffTime = (card.end.getTime() - card.start.getTime());
 
   return `<li class="trip-events__item">
 <div class="event">
@@ -23,9 +23,9 @@ export const createCardTemplate = (card) => {
   <h3 class="event__title">${card.type} ${getPrefix(card.type)} ${card.location}</h3>
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime=${card.startDate}>${moment(card.startDate).format(`DD/MM HH:MM`)}</time>
+      <time class="event__start-time" datetime=${card.start}>${moment(card.start).format(`HH:MM`)}</time>
       &mdash;
-      <time class="event__end-time" datetime=${card.endDate}>${moment(card.endDate).format(`DD/MM HH:MM`)}</time>
+      <time class="event__end-time" datetime=${card.end}>${moment(card.end).format(`HH:MM`)}</time>
     </p>
     <p class="event__duration">${getDiff(diffTime)}</p>
   </div>

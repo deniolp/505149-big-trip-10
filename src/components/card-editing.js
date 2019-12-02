@@ -4,7 +4,6 @@ import {transfers, activities, locations, offers} from '../mock/card';
 import getPrefix from '../utils';
 
 export const createEditCardTemplate = (card) => {
-  console.log(card.offers);
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
@@ -34,7 +33,7 @@ export const createEditCardTemplate = (card) => {
     <label class="event__label event__type-output" for="event-destination-1">
     ${card.type} ${getPrefix(card.type)}
     </label>
-    <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${locations[0]} list="destination-list-1">
+    <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${card.location} list="destination-list-1">
     <datalist id="destination-list-1">
       ${locations.map((it) => `<option value=${it}></option>`).join(`\n`).trim()}
     </datalist>
@@ -43,12 +42,12 @@ export const createEditCardTemplate = (card) => {
     <label class="visually-hidden" for="event-start-time-1">
       From
     </label>
-    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(card.startDate).format(`DD/MM/YY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(card.start).format(`DD/MM/YY&#160;HH:MM`)}>
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">
       To
     </label>
-    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(card.endDate).format(`DD/MM/YY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(card.end).format(`DD/MM/YY&#160;HH:MM`)}>
   </div>
   <div class="event__field-group event__field-group--price">
     <label class="event__label" for="event-price-1">

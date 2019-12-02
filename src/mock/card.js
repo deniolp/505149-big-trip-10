@@ -76,17 +76,18 @@ const getRandomArrayItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const getDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (start.getTime() - end.getTime()));
 };
+let firstDate = getDate(new Date(2019, 12, 10), new Date(2020, 2, 15));
 
 const generateCard = () => {
-  const start = getDate(new Date(2019, 12, 10), new Date(2020, 2, 15));
-  const end = new Date(start);
-  end.setHours(start.getHours() + getRandomNumber(1, 4));
+  const start = firstDate;
+  firstDate = new Date(firstDate.setHours(firstDate.getHours() + getRandomNumber(1, 4)));
+  const end = new Date(firstDate.setHours(firstDate.getHours() + getRandomNumber(1, 3)));
 
   return {
     type: getRandomArrayItem(transfers.concat(activities)),
     location: getRandomArrayItem(locations),
-    startDate: start,
-    endDate: end,
+    start,
+    end,
     offers: offers.slice().splice(getRandomNumber(0, 4), getRandomNumber(0, 4)),
     photos: Array(5)
       .fill(``)
