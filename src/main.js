@@ -9,6 +9,7 @@ import {createDayTemplate} from '../src/components/day';
 
 import filters from "./mock/filter";
 import menuItems from "./mock/menu";
+import generateCard from "./mock/card";
 
 const CARDS_COUNT = 3;
 
@@ -31,4 +32,4 @@ render(daysElement, createDayTemplate());
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
 render(dayElement, createEditCardTemplate());
-new Array(CARDS_COUNT).fill(``).forEach(() => render(dayElement, createCardTemplate()));
+new Array(CARDS_COUNT).fill(``).forEach(() => render(dayElement, createCardTemplate(generateCard())));

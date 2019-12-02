@@ -1,0 +1,97 @@
+const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
+const events = [
+  `Taxi`,
+  `Bus`,
+  `Train`,
+  `Ship`,
+  `Transport`,
+  `Drive`,
+  `Flight`,
+  `Check-in`,
+  `Sightseeing`,
+  `Restaurant`,
+  `Trip`,
+];
+const offers = [
+  {
+    name: `Add luggage`,
+    type: `luggage`,
+    price: 10,
+    checked: true
+  },
+  {
+    name: `Switch to comfort class`,
+    type: `comfort`,
+    price: 150,
+    checked: false
+  },
+  {
+    name: `Add meal`,
+    type: `meal`,
+    price: 2,
+    checked: false
+  },
+  {
+    name: `Choose seats`,
+    type: `seats`,
+    price: 9,
+    checked: true
+  },
+];
+const sentences = [
+  `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+  `Cras aliquet varius magna, non porta ligula feugiat eget.`,
+  `Fusce tristique felis at fermentum pharetra.`,
+  `Aliquam id orci ut lectus varius viverra.`,
+  `Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.`,
+  `Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.`,
+  `Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.`,
+  `Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat.`,
+  `Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
+];
+
+const shuffleArray = (arr) => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+
+const getRandomPhoto = () => `http://picsum.photos/300/150?r=${Math.random()}`;
+
+const getRandomDescriprion = () =>
+  shuffleArray(sentences)
+    .slice(0, getRandomNumber(1, 4))
+    .join(` `);
+
+const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+const getRandomArrayItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+const getDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (start.getTime() - end.getTime()));
+};
+
+const generateCard = () => {
+  const start = getDate(new Date(2019, 12, 10), new Date(2020, 2, 15));
+  const end = new Date(start);
+  end.setHours(start.getHours() + getRandomNumber(1, 4));
+
+  return {
+    event: getRandomArrayItem(events),
+    city: getRandomArrayItem(locations),
+    startDate: start,
+    endDate: end,
+    offers: offers.slice().splice(getRandomNumber(0, 4), getRandomNumber(0, 3)),
+    photos: Array(5)
+      .fill(``)
+      .map(getRandomPhoto),
+    description: getRandomDescriprion(sentences),
+    price: getRandomNumber(10, 100)
+  };
+};
+
+export default generateCard;
