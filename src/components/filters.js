@@ -7,7 +7,7 @@ ${filters.map((filter) => `<div class="trip-filters__filter">
   type="radio"
   name="trip-filter"
   value="${filter.name.toLowerCase()}"
-  ${filter.checked && `checked`}
+  ${filter.checked ? `checked` : ``}
 />
 <label
   class="trip-filters__filter-label"
@@ -15,6 +15,6 @@ ${filters.map((filter) => `<div class="trip-filters__filter">
 >
   ${filter.name}
 </label>
-</div>`).join(``)}
+</div>`).join(``).trim()}
 <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
