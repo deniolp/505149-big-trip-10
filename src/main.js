@@ -7,6 +7,8 @@ import {createEditCardTemplate} from '../src/components/card-editing';
 import {createDaysTemplate} from '../src/components/days';
 import {createDayTemplate} from '../src/components/day';
 
+import filters from "./mock/filter";
+
 const CARDS_COUNT = 3;
 
 const render = (container, template, place = `beforeEnd`) => {
@@ -19,7 +21,7 @@ const eventsElement = document.querySelector(`.trip-events`);
 
 render(infoElement, createInfoTemplate(), `afterBegin`);
 render(controlsElement, createMenuTemplate());
-render(controlsElement, createFiltersTemplate());
+render(controlsElement, createFiltersTemplate(filters));
 render(eventsElement, createTripSortingTemplate());
 render(eventsElement, createDaysTemplate());
 
