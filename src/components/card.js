@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import getPrefix from '../utils';
+
 const addNullToTime = (time) => {
   return time > 9 ? time : `0` + time;
 };
@@ -11,16 +13,14 @@ const getDiff = (time) => {
 };
 
 export const createCardTemplate = (card) => {
-  const activities = [`check-in`, `sightseeing`, `restaurant`];
-  const type = activities.some((it) => it === card.event.toLowerCase()) ? `at` : `to`;
   const diffTime = (card.endDate.getTime() - card.startDate.getTime());
 
   return `<li class="trip-events__item">
 <div class="event">
   <div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${card.event.toLowerCase()}.png" alt="Event type icon">
+    <img class="event__type-icon" width="42" height="42" src="img/icons/${card.type.toLowerCase()}.png" alt="Event type icon">
   </div>
-  <h3 class="event__title">${card.event} ${type} ${card.city}</h3>
+  <h3 class="event__title">${card.type} ${getPrefix(card.type)} ${card.location}</h3>
   <div class="event__schedule">
     <p class="event__time">
       <time class="event__start-time" datetime=${card.startDate}>${moment(card.startDate).format(`DD/MM HH:MM`)}</time>

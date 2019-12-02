@@ -1,5 +1,5 @@
-const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
-const events = [
+export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
+export const transfers = [
   `Taxi`,
   `Bus`,
   `Train`,
@@ -7,10 +7,11 @@ const events = [
   `Transport`,
   `Drive`,
   `Flight`,
+];
+export const activities = [
   `Check-in`,
   `Sightseeing`,
   `Restaurant`,
-  `Trip`,
 ];
 const offers = [
   {
@@ -36,6 +37,12 @@ const offers = [
     type: `seats`,
     price: 9,
     checked: true
+  },
+  {
+    name: `Travel by train`,
+    type: `train`,
+    price: 40,
+    checked: true,
   },
 ];
 const sentences = [
@@ -81,11 +88,11 @@ const generateCard = () => {
   end.setHours(start.getHours() + getRandomNumber(1, 4));
 
   return {
-    event: getRandomArrayItem(events),
-    city: getRandomArrayItem(locations),
+    type: getRandomArrayItem(transfers.concat(activities)),
+    location: getRandomArrayItem(locations),
     startDate: start,
     endDate: end,
-    offers: offers.slice().splice(getRandomNumber(0, 4), getRandomNumber(0, 3)),
+    offers: offers.slice().splice(getRandomNumber(0, 4), getRandomNumber(0, 4)),
     photos: Array(5)
       .fill(``)
       .map(getRandomPhoto),

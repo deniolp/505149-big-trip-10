@@ -31,7 +31,7 @@ const daysElement = eventsElement.querySelector(`.trip-days`);
 render(daysElement, createDayTemplate());
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
-render(dayElement, createEditCardTemplate());
+render(dayElement, createEditCardTemplate(generateCard()));
 const points = new Array(CARDS_COUNT).fill(``).map((point) => {
   point = generateCard();
   return point;
