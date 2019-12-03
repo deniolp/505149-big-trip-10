@@ -1,16 +1,6 @@
 import moment from 'moment';
 
-import getPrefix from '../utils';
-
-const addNullToTime = (time) => {
-  return time > 9 ? time : `0` + time;
-};
-
-const getDiff = (time) => {
-  const hours = addNullToTime(new Date(time).getUTCHours());
-  const minutes = addNullToTime(new Date(time).getUTCMinutes());
-  return `${hours}H ${minutes}M`;
-};
+import {getPrefix, getDiff} from '../utils';
 
 export const createCardTemplate = (card) => {
   const diffTime = (card.end.getTime() - card.start.getTime());
