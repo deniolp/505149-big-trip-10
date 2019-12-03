@@ -1,4 +1,5 @@
 import {createInfoTemplate} from '../src/components/info';
+import {createCostTemplate} from '../src/components/total-cost';
 import {createMenuTemplate} from '../src/components/menu';
 import {createFiltersTemplate} from '../src/components/filters';
 import {createTripSortingTemplate} from '../src/components/sortings';
@@ -26,6 +27,7 @@ const controlsElement = document.querySelector(`.trip-controls`);
 const eventsElement = document.querySelector(`.trip-events`);
 
 render(infoElement, createInfoTemplate(points), `afterBegin`);
+render(infoElement, createCostTemplate(points));
 render(controlsElement, createMenuTemplate(menuItems));
 render(controlsElement, createFiltersTemplate(filters));
 render(eventsElement, createTripSortingTemplate());

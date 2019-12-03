@@ -1,5 +1,5 @@
-export const createFiltersTemplate = (filters) => `<h2 class="visually-hidden">Filter events</h2>
-<form class="trip-filters" action="#" method="get">
+export const createFiltersTemplate = (filters) => `<form class="trip-filters" action="#" method="get">
+<h2 class="visually-hidden">Filter events</h2>
 ${filters.map((filter) => `<div class="trip-filters__filter">
 <input
   id="filter-${filter.name.toLowerCase()}
