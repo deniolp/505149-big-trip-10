@@ -4,7 +4,7 @@ export const RenderPosition = {
 };
 const activities = [`Check-in`, `Sightseeing`, `Restaurant`];
 
-const createElement = (template) => {
+export const createElement = (template) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = template;
 
@@ -14,10 +14,10 @@ const createElement = (template) => {
 export const render = (container, element, place) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
-      container.prepend(createElement(element));
+      container.prepend(element);
       break;
     case RenderPosition.BEFOREEND:
-      container.append(createElement(element));
+      container.append(element);
       break;
   }
 };

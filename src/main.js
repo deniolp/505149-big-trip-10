@@ -1,12 +1,12 @@
-import {createInfoTemplate} from '../src/components/info';
-import {createCostTemplate} from '../src/components/total-cost';
-import {createMenuTemplate} from '../src/components/menu';
-import {createFiltersTemplate} from '../src/components/filters';
-import {createTripSortingTemplate} from '../src/components/sortings';
-import {createCardTemplate} from '../src/components/card';
-import {createEditCardTemplate} from '../src/components/card-editing';
-import {createDaysTemplate} from '../src/components/days';
-import {createDayTemplate} from '../src/components/day';
+import Info from '../src/components/info';
+import TotalCost from '../src/components/total-cost';
+import Menu from '../src/components/menu';
+import Filters from '../src/components/filters';
+import TripSorting from '../src/components/sortings';
+import Card from '../src/components/card';
+import CardEditing from '../src/components/card-editing';
+import Days from '../src/components/days';
+import Day from '../src/components/day';
 import {render, RenderPosition} from './utils.js';
 
 import filters from "./mock/filter";
@@ -23,16 +23,16 @@ const infoElement = document.querySelector(`.trip-info`);
 const controlsElement = document.querySelector(`.trip-controls`);
 const eventsElement = document.querySelector(`.trip-events`);
 
-render(infoElement, createInfoTemplate(points), RenderPosition.AFTERBEGIN);
-render(infoElement, createCostTemplate(points), RenderPosition.BEFOREEND);
-render(controlsElement, createMenuTemplate(menuItems), RenderPosition.BEFOREEND);
-render(controlsElement, createFiltersTemplate(filters), RenderPosition.BEFOREEND);
-render(eventsElement, createTripSortingTemplate(), RenderPosition.BEFOREEND);
-render(eventsElement, createDaysTemplate(), RenderPosition.BEFOREEND);
+render(infoElement, new Info(points).getElement(), RenderPosition.AFTERBEGIN);
+render(infoElement, new TotalCost(points).getElement(), RenderPosition.BEFOREEND);
+render(controlsElement, new Menu(menuItems).getElement(), RenderPosition.BEFOREEND);
+render(controlsElement, new Filters(filters).getElement(), RenderPosition.BEFOREEND);
+render(eventsElement, new TripSorting().getElement(), RenderPosition.BEFOREEND);
+render(eventsElement, new Days().getElement(), RenderPosition.BEFOREEND);
 
 const daysElement = eventsElement.querySelector(`.trip-days`);
-render(daysElement, createDayTemplate(points[0].start), RenderPosition.BEFOREEND);
+render(daysElement, new Day(points[0].start).getElement(), RenderPosition.BEFOREEND);
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
-points.forEach((point) => render(dayElement, createCardTemplate(point), RenderPosition.BEFOREEND));
-render(dayElement, createEditCardTemplate(points[0]), RenderPosition.AFTERBEGIN);
+points.forEach((point) => render(dayElement, new Card(point).getElement(), RenderPosition.BEFOREEND));
+render(dayElement, new CardEditing(points[0]).getElement(), RenderPosition.AFTERBEGIN);

@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import {getPrefix, getDiff} from '../utils';
+import {getPrefix, getDiff, createElement} from '../utils';
 
-export const createCardTemplate = (card) => {
+const createCardTemplate = (card) => {
   const diffTime = (card.end.getTime() - card.start.getTime());
 
   return `<li class="trip-events__item">
@@ -37,3 +37,28 @@ export const createCardTemplate = (card) => {
 </div>
 </li>`;
 };
+
+export default class Card {
+  constructor(card) {
+    this._card = card;
+
+    this._element = null;
+  }
+
+  _getTemplate() {
+    return createCardTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this._getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
