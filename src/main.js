@@ -13,11 +13,27 @@ import filters from "./mock/filter";
 import menuItems from "./mock/menu";
 import generateCard from "./mock/card";
 
-const CARDS_COUNT = 4;
+const CARDS_COUNT = 3;
 const points = new Array(CARDS_COUNT).fill(``).map((point) => {
   point = generateCard();
   return point;
 });
+
+const renderPoint = (point) => {
+  const pointComponent = new Card(point);
+  const pointEditComponent = new CardEditing(point);
+
+  const rollupButton = pointComponent.getElement().querySelector(`.event__rollup-btn`);
+  rollupButton.addEventListener(`click`, () => {
+    dayElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  });
+
+  pointEditComponent.getElement().addEventListener(`submit`, () => {
+    dayElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  });
+
+  render(dayElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+};
 
 const infoElement = document.querySelector(`.trip-info`);
 const controlsElement = document.querySelector(`.trip-controls`);
@@ -34,5 +50,4 @@ const daysElement = eventsElement.querySelector(`.trip-days`);
 render(daysElement, new Day(points[0].start).getElement(), RenderPosition.BEFOREEND);
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
-points.forEach((point) => render(dayElement, new Card(point).getElement(), RenderPosition.BEFOREEND));
-render(dayElement, new CardEditing(points[0]).getElement(), RenderPosition.AFTERBEGIN);
+points.forEach((point) => renderPoint(point));
