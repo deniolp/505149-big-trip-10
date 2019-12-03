@@ -20,17 +20,33 @@ const points = new Array(CARDS_COUNT).fill(``).map((point) => {
 });
 
 const renderPoint = (point) => {
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      replaceEditToTask();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  const replaceEditToTask = () => {
+    dayElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+  };
+
+  const replaceTaskToEdit = () => {
+    dayElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  };
+
   const pointComponent = new Card(point);
   const pointEditComponent = new CardEditing(point);
-
   const rollupButton = pointComponent.getElement().querySelector(`.event__rollup-btn`);
+
   rollupButton.addEventListener(`click`, () => {
-    dayElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replaceTaskToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  pointEditComponent.getElement().addEventListener(`submit`, () => {
-    dayElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
-  });
+  pointEditComponent.getElement().addEventListener(`submit`, replaceEditToTask);
 
   render(dayElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
