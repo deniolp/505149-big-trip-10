@@ -20,16 +20,12 @@ const points = new Array(CARDS_COUNT).fill(``).map((point) => {
   point = generateCard();
   return point;
 });
-const totalPrice = points.reduce((acc, item) => {
-  acc += item.price;
-  return acc;
-}, 0);
 
 const infoElement = document.querySelector(`.trip-info`);
 const controlsElement = document.querySelector(`.trip-controls`);
 const eventsElement = document.querySelector(`.trip-events`);
 
-render(infoElement, createInfoTemplate(totalPrice), `afterBegin`);
+render(infoElement, createInfoTemplate(points), `afterBegin`);
 render(controlsElement, createMenuTemplate(menuItems));
 render(controlsElement, createFiltersTemplate(filters));
 render(eventsElement, createTripSortingTemplate());
