@@ -1,9 +1,9 @@
 import moment from 'moment';
 
 import {transfers, activities, locations, offers} from '../mock/card';
-import getPrefix from '../utils';
+import {getPrefix, createElement} from '../utils';
 
-export const createEditCardTemplate = (card) => {
+const createEditCardTemplate = (card) => {
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
@@ -95,3 +95,27 @@ export const createEditCardTemplate = (card) => {
 </section>
 </form>`;
 };
+
+export default class CardEditing {
+  constructor(card) {
+    this._card = card;
+
+    this._element = null;
+  }
+
+  _getTemplate() {
+    return createEditCardTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this._getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
