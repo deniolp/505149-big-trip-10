@@ -1,5 +1,9 @@
-export const createMenuTemplate = () => `<h2 class="visually-hidden">Switch trip view</h2>
+export const createMenuTemplate = (menuItems) => `<h2 class="visually-hidden">Switch trip view</h2>
 <nav class="trip-controls__trip-tabs  trip-tabs">
-<a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-<a class="trip-tabs__btn" href="#">Stats</a>
+  ${menuItems.map((item) => `<a
+    class="trip-tabs__btn${item.active ? ` trip-tabs__btn--active` : ``}"
+    href="#"
+  >
+    ${item.name}
+  </a>`).join(``).trim()}
 </nav>`;

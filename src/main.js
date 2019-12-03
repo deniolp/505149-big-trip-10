@@ -7,25 +7,33 @@ import {createEditCardTemplate} from '../src/components/card-editing';
 import {createDaysTemplate} from '../src/components/days';
 import {createDayTemplate} from '../src/components/day';
 
-const CARDS_COUNT = 3;
+import filters from "./mock/filter";
+import menuItems from "./mock/menu";
+import generateCard from "./mock/card";
+
+const CARDS_COUNT = 4;
 
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);
 };
+const points = new Array(CARDS_COUNT).fill(``).map((point) => {
+  point = generateCard();
+  return point;
+});
 
 const infoElement = document.querySelector(`.trip-info`);
 const controlsElement = document.querySelector(`.trip-controls`);
 const eventsElement = document.querySelector(`.trip-events`);
 
-render(infoElement, createInfoTemplate(), `afterBegin`);
-render(controlsElement, createMenuTemplate());
-render(controlsElement, createFiltersTemplate());
+render(infoElement, createInfoTemplate(points), `afterBegin`);
+render(controlsElement, createMenuTemplate(menuItems));
+render(controlsElement, createFiltersTemplate(filters));
 render(eventsElement, createTripSortingTemplate());
 render(eventsElement, createDaysTemplate());
 
 const daysElement = eventsElement.querySelector(`.trip-days`);
-render(daysElement, createDayTemplate());
+render(daysElement, createDayTemplate(points[0].start));
 
 const dayElement = eventsElement.querySelector(`.trip-events__list`);
-render(dayElement, createEditCardTemplate());
-new Array(CARDS_COUNT).fill(``).forEach(() => render(dayElement, createCardTemplate()));
+points.forEach((point) => render(dayElement, createCardTemplate(point)));
+render(dayElement, createEditCardTemplate(points[0]), `afterBegin`);
