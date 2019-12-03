@@ -11,7 +11,7 @@ import filters from "./mock/filter";
 import menuItems from "./mock/menu";
 import generateCard from "./mock/card";
 
-const CARDS_COUNT = 3;
+const CARDS_COUNT = 4;
 
 const render = (container, template, place = `beforeEnd`) => {
   container.insertAdjacentHTML(place, template);

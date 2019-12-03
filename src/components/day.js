@@ -8,4 +8,4 @@ export const createDayTemplate = (date) => {
   </div>
   <ul class="trip-events__list"></ul>
   </li>`;
-}
+};
