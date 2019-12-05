@@ -1,26 +1,24 @@
-import moment from 'moment';
-
 import {createElement} from '../utils';
 
-const createDayTemplate = (date) => {
+const createDayTemplate = (day) => {
   return `<li class="trip-days__item  day">
   <div class="day__info">
-    <span class="day__counter">1</span>
-    <time class="day__date" datetime=${moment(date).format(`YYYY-MM-DD`)}>${moment(date).format(`MMM DD`)}</time>
+    <span class="day__counter">${day.number}</span>
+    <time class="day__date" datetime=${day.date}>${day.date}</time>
   </div>
   <ul class="trip-events__list"></ul>
   </li>`;
 };
 
 export default class Day {
-  constructor(date) {
-    this._date = date;
+  constructor(day) {
+    this._day = day;
 
     this._element = null;
   }
 
   _getTemplate() {
-    return createDayTemplate(this._date);
+    return createDayTemplate(this._day);
   }
 
   getElement() {
