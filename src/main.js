@@ -20,6 +20,22 @@ const points = new Array(CARDS_COUNT).fill(``).map((point) => {
   return point;
 });
 
+const groupPointsByDate = (items) => {
+  const pointDates = Array.from(new Set(items.map((point) => {
+    return point.date;
+  })));
+
+  return pointDates.map((pointDate, i) => {
+    return {
+      day: {
+        number: i + 1,
+        date: pointDate,
+      },
+      points: items.filter((point) => point.date === pointDate)
+    };
+  });
+};
+
 const renderPoint = (point, dayElement) => {
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
@@ -70,12 +86,13 @@ if (points.length) {
   render(eventsElement, new Days().getElement(), RenderPosition.BEFOREEND);
 
   const daysElement = eventsElement.querySelector(`.trip-days`);
+  const groupedByDatePoints = groupPointsByDate(points);
 
-  render(daysElement, new Day(points[0].start).getElement(), RenderPosition.BEFOREEND);
-
-  const dayElement = eventsElement.querySelector(`.trip-events__list`);
-
-  points.forEach((point) => renderPoint(point, dayElement));
+  groupedByDatePoints.forEach((date) => {
+    render(daysElement, new Day(date.day).getElement(), RenderPosition.BEFOREEND);
+    const dayElement = eventsElement.querySelector(`.trip-days__item:nth-child(${date.day.number}) .trip-events__list`);
+    date.points.forEach((point) => renderPoint(point, dayElement));
+  });
 } else {
   render(eventsElement, new NoCards().getElement(), RenderPosition.BEFOREEND);
 }
