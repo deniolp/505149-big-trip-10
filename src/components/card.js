@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import {getPrefix, getDiff} from '../utils';
+import {getPrefix, getDiff} from '../utils/common';
 import AbstractComponent from './abstract-component';
 
 const createCardTemplate = (card) => {

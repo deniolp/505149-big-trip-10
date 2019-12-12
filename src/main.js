@@ -8,7 +8,7 @@ import CardEditing from '../src/components/card-editing';
 import NoCards from '../src/components/no-cards';
 import Days from '../src/components/days';
 import Day from '../src/components/day';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition} from './utils/render';
 
 import filters from "./mock/filter";
 import menuItems from "./mock/menu";

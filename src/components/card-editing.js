@@ -2,7 +2,7 @@ import moment from 'moment';
 
 import AbstractComponent from './abstract-component';
 import {transfers, activities, locations, offers} from '../mock/card';
-import {getPrefix} from '../utils';
+import {getPrefix} from '../utils/common';
 
 const createEditCardTemplate = (card) => {
   return `<form class="event event--edit" action="#" method="post">
