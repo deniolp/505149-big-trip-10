@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 
 const createCostTemplate = (points) => {
   const totalPrice = points.reduce((acc, item) => {
@@ -11,26 +11,14 @@ const createCostTemplate = (points) => {
   </p>`;
 };
 
-export default class TotalCost {
+export default class TotalCost extends AbstractComponent {
   constructor(points) {
-    this._points = points;
+    super();
 
-    this._element = null;
+    this._points = points;
   }
 
   _getTemplate() {
     return createCostTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

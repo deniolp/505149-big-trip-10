@@ -1,7 +1,8 @@
 import moment from 'moment';
 
+import AbstractComponent from './abstract-component';
 import {transfers, activities, locations, offers} from '../mock/card';
-import {getPrefix, createElement} from '../utils';
+import {getPrefix} from '../utils';
 
 const createEditCardTemplate = (card) => {
   return `<form class="event event--edit" action="#" method="post">
@@ -96,26 +97,14 @@ const createEditCardTemplate = (card) => {
 </form>`;
 };
 
-export default class CardEditing {
+export default class CardEditing extends AbstractComponent {
   constructor(card) {
-    this._card = card;
+    super();
 
-    this._element = null;
+    this._card = card;
   }
 
   _getTemplate() {
     return createEditCardTemplate(this._card);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
