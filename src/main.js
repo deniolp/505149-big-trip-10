@@ -8,7 +8,7 @@ import CardEditing from '../src/components/card-editing';
 import NoCards from '../src/components/no-cards';
 import Days from '../src/components/days';
 import Day from '../src/components/day';
-import {render, RenderPosition} from './utils/render';
+import {render, RenderPosition, replace} from './utils/render';
 
 import filters from "./mock/filter";
 import menuItems from "./mock/menu";
@@ -41,21 +41,14 @@ const renderPoint = (point, dayElement) => {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      replaceEditToCard();
+      replace(pointComponent, pointEditComponent);
       document.removeEventListener(`keydown`, onEscKeyDown);
     }
   };
 
-  const replaceEditToCard = () => {
-    try {
-      return dayElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
-    } catch (_error) {
-      return () => {};
-    }
-  };
-
-  const replaceCardToEdit = () => {
-    dayElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+  const onSubmit = () => {
+    replace(pointComponent, pointEditComponent);
+    document.removeEventListener(`submit`, onSubmit);
   };
 
   const pointComponent = new Card(point);
@@ -63,11 +56,11 @@ const renderPoint = (point, dayElement) => {
   const rollupButton = pointComponent.getElement().querySelector(`.event__rollup-btn`);
 
   rollupButton.addEventListener(`click`, () => {
-    replaceCardToEdit();
+    replace(pointEditComponent, pointComponent);
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  pointEditComponent.getElement().addEventListener(`submit`, replaceEditToCard);
+  pointEditComponent.getElement().addEventListener(`submit`, onSubmit);
 
   render(dayElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
