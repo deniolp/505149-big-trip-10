@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import AbstractComponent from './abstract-component';
-import {transfers, activities, locations, offers} from '../mock/card';
+import {transfers, activities, locations, offers} from '../mock/points';
 import {getPrefix} from '../utils/common';
 
 const createEditCardTemplate = (card) => {

@@ -1,5 +1,6 @@
 import moment from 'moment';
 
+const CARDS_COUNT = 3;
 export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
 export const transfers = [
   `Taxi`,
@@ -100,4 +101,9 @@ const generateCard = () => {
   };
 };
 
-export default generateCard;
+const points = new Array(CARDS_COUNT).fill(``).map((point) => {
+  point = generateCard();
+  return point;
+});
+
+export default points;
