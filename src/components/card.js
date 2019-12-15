@@ -1,6 +1,7 @@
 import moment from 'moment';
 
-import {getPrefix, getDiff, createElement} from '../utils';
+import {getPrefix, getDiff} from '../utils/common';
+import AbstractComponent from './abstract-component';
 
 const createCardTemplate = (card) => {
   const diffTime = (card.end.getTime() - card.start.getTime());
@@ -38,27 +39,19 @@ const createCardTemplate = (card) => {
 </li>`;
 };
 
-export default class Card {
+export default class Card extends AbstractComponent {
   constructor(card) {
-    this._card = card;
+    super();
 
-    this._element = null;
+    this._card = card;
   }
 
   _getTemplate() {
     return createCardTemplate(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setRollupButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }
 

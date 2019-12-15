@@ -1,28 +1,12 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component';
 
 const createNoCardsTemplate = () => {
   return `<p class="trip-events__msg">Click New Event to create your first point</p>`;
 };
 
 
-export default class NoCards {
-  constructor() {
-    this._element = null;
-  }
-
-  getTemplate() {
+export default class NoCards extends AbstractComponent {
+  _getTemplate() {
     return createNoCardsTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
