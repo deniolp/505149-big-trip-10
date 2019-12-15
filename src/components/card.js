@@ -49,5 +49,9 @@ export default class Card extends AbstractComponent {
   _getTemplate() {
     return createCardTemplate(this._card);
   }
+
+  setRollupButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
+  }
 }
 

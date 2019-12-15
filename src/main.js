@@ -53,9 +53,8 @@ const renderPoint = (point, dayElement) => {
 
   const pointComponent = new Card(point);
   const pointEditComponent = new CardEditing(point);
-  const rollupButton = pointComponent.getElement().querySelector(`.event__rollup-btn`);
 
-  rollupButton.addEventListener(`click`, () => {
+  pointComponent.setRollupButtonClickHandler(() => {
     replace(pointEditComponent, pointComponent);
     document.addEventListener(`keydown`, onEscKeyDown);
   });
