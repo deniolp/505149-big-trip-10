@@ -3,29 +3,29 @@ import moment from 'moment';
 import {getPrefix, getDiff} from '../utils/common';
 import AbstractComponent from './abstract-component';
 
-const createCardTemplate = (card) => {
-  const diffTime = (card.end.getTime() - card.start.getTime());
+const createPointTemplate = (point) => {
+  const diffTime = (point.end.getTime() - point.start.getTime());
 
   return `<li class="trip-events__item">
 <div class="event">
   <div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${card.type.toLowerCase()}.png" alt="Event type icon">
+    <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
   </div>
-  <h3 class="event__title">${card.type} ${getPrefix(card.type)} ${card.location}</h3>
+  <h3 class="event__title">${point.type} ${getPrefix(point.type)} ${point.location}</h3>
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime=${card.start}>${moment(card.start).format(`HH:MM`)}</time>
+      <time class="event__start-time" datetime=${point.start}>${moment(point.start).format(`HH:MM`)}</time>
       &mdash;
-      <time class="event__end-time" datetime=${card.end}>${moment(card.end).format(`HH:MM`)}</time>
+      <time class="event__end-time" datetime=${point.end}>${moment(point.end).format(`HH:MM`)}</time>
     </p>
     <p class="event__duration">${getDiff(diffTime)}</p>
   </div>
   <p class="event__price">
-    &euro;&nbsp;<span class="event__price-value">${card.price}</span>
+    &euro;&nbsp;<span class="event__price-value">${point.price}</span>
   </p>
   <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
-    ${card.offers.map((it) => `<li
+    ${point.offers.map((it) => `<li
     class="event__offer">
     <span class="event__offer-title">${it.name}</span>
     &plus;
@@ -39,15 +39,15 @@ const createCardTemplate = (card) => {
 </li>`;
 };
 
-export default class Card extends AbstractComponent {
-  constructor(card) {
+export default class Point extends AbstractComponent {
+  constructor(point) {
     super();
 
-    this._card = card;
+    this._point = point;
   }
 
   _getTemplate() {
-    return createCardTemplate(this._card);
+    return createPointTemplate(this._point);
   }
 
   setRollupButtonClickHandler(handler) {

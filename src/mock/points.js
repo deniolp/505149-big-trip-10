@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const CARDS_COUNT = 3;
+const POINTS_COUNT = 3;
 export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
 export const transfers = [
   `Taxi`,
@@ -81,7 +81,7 @@ const getDate = (start, end) => {
 };
 let firstDate = getDate(new Date(2019, 12, 10), new Date(2020, 2, 15));
 
-const generateCard = () => {
+const generatePoint = () => {
   const start = firstDate;
   firstDate = new Date(firstDate.setHours(firstDate.getHours() + getRandomNumber(1, 4)));
   const end = new Date(firstDate.setHours(firstDate.getHours() + getRandomNumber(1, 3)));
@@ -101,8 +101,8 @@ const generateCard = () => {
   };
 };
 
-const points = new Array(CARDS_COUNT).fill(``).map((point) => {
-  point = generateCard();
+const points = new Array(POINTS_COUNT).fill(``).map((point) => {
+  point = generatePoint();
   return point;
 });
 

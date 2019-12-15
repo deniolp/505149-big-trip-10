@@ -1,8 +1,8 @@
 import Info from '../components/info';
 import TripSorting, {SortType} from '../components/sortings';
-import Card from '../components/card';
-import CardEditing from '../components/card-editing';
-import NoCards from '../components/no-cards';
+import Point from '../components/point';
+import PointEditing from '../components/point-editing';
+import NoPoints from '../components/no-points';
 import Days from '../components/days';
 import Day from '../components/day';
 import {render, RenderPosition, replace} from '../utils/render';
@@ -17,8 +17,8 @@ const renderPoint = (point, dayElement) => {
     }
   };
 
-  const pointComponent = new Card(point);
-  const pointEditComponent = new CardEditing(point);
+  const pointComponent = new Point(point);
+  const pointEditComponent = new PointEditing(point);
 
   pointComponent.setRollupButtonClickHandler(() => {
     replace(pointEditComponent, pointComponent);
@@ -52,7 +52,7 @@ export default class TripController {
 
     this._tripSortingComponent = new TripSorting();
     this._daysComponent = new Days().getElement();
-    this._noCardsComponent = new NoCards().getElement();
+    this._noCardsComponent = new NoPoints().getElement();
   }
 
   render(points) {
