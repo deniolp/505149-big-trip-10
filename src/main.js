@@ -46,11 +46,6 @@ const renderPoint = (point, dayElement) => {
     }
   };
 
-  const onSubmit = () => {
-    replace(pointComponent, pointEditComponent);
-    document.removeEventListener(`submit`, onSubmit);
-  };
-
   const pointComponent = new Card(point);
   const pointEditComponent = new CardEditing(point);
 
@@ -59,7 +54,7 @@ const renderPoint = (point, dayElement) => {
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  pointEditComponent.getElement().addEventListener(`submit`, onSubmit);
+  pointEditComponent.setSubmitHandler(() => replace(pointComponent, pointEditComponent));
 
   render(dayElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };

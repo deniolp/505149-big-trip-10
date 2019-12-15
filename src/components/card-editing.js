@@ -107,4 +107,8 @@ export default class CardEditing extends AbstractComponent {
   _getTemplate() {
     return createEditCardTemplate(this._card);
   }
+
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
 }
