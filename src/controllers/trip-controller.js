@@ -47,26 +47,24 @@ const groupPointsByDate = (items) => {
 };
 
 export default class TripController {
-  constructor(container, points) {
+  constructor(container) {
     this._container = container;
-    this._points = points;
 
     this._tripSortingComponent = new TripSorting().getElement();
-    this._infoComponent = new Info(this._points).getElement();
     this._daysComponent = new Days().getElement();
     this._noCardsComponent = new NoCards().getElement();
   }
 
-  render() {
-    const infoElement = document.querySelector(`.trip-info`);
+  render(points) {
+    const infoContainer = document.querySelector(`.trip-info`);
 
-    if (this._points.length) {
-      render(infoElement, this._infoComponent, RenderPosition.AFTERBEGIN);
+    if (points.length) {
+      render(infoContainer, new Info(points).getElement(), RenderPosition.AFTERBEGIN);
       render(this._container, this._tripSortingComponent, RenderPosition.BEFOREEND);
       render(this._container, this._daysComponent, RenderPosition.BEFOREEND);
 
       const daysElement = this._container.querySelector(`.trip-days`);
-      const groupedByDatePoints = groupPointsByDate(this._points);
+      const groupedByDatePoints = groupPointsByDate(points);
 
       groupedByDatePoints.forEach((date) => {
         render(daysElement, new Day(date.day).getElement(), RenderPosition.BEFOREEND);

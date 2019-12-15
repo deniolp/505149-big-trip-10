@@ -16,6 +16,6 @@ render(infoElement, new TotalCost(points).getElement(), RenderPosition.BEFOREEND
 render(controlsElement, new Menu(menuItems).getElement(), RenderPosition.BEFOREEND);
 render(controlsElement, new Filters(filters).getElement(), RenderPosition.BEFOREEND);
 
-const tripController = new TripController(eventsElement, points);
+const tripController = new TripController(eventsElement);
 
-tripController.render();
+tripController.render(points);
