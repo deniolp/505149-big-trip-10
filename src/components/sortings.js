@@ -37,13 +37,11 @@ export default class TripSorting extends AbstractComponent {
   }
 
   _getTemplate() {
-    return createTripSortingTemplate();
+    return createTripSortingTemplate(this._currenSortType);
   }
 
   setSortTypeChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
       if (evt.target.tagName !== `LABEL`) {
         return;
       }

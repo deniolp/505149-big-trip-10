@@ -5,7 +5,7 @@ import PointEditing from '../components/point-editing';
 import NoPoints from '../components/no-points';
 import Days from '../components/days';
 import Day from '../components/day';
-import {render, RenderPosition, replace} from '../utils/render';
+import {render, RenderPosition, replace, remove} from '../utils/render';
 
 const renderPoint = (point, dayElement) => {
   const onEscKeyDown = (evt) => {
@@ -51,8 +51,8 @@ export default class TripController {
     this._container = container;
 
     this._tripSortingComponent = new TripSorting();
-    this._daysComponent = new Days().getElement();
-    this._noCardsComponent = new NoPoints().getElement();
+    this._daysComponent = new Days();
+    this._noPointsComponent = new NoPoints().getElement();
   }
 
   render(points) {
@@ -68,39 +68,38 @@ export default class TripController {
       this._tripSortingComponent.setSortTypeChangeHandler((sortType) => {
         switch (sortType) {
           case SortType.EVENT:
-            this._daysComponent.remove();
+            remove(this._daysComponent);
             this._renderPreparedPoints(groupPointsByDate(points), true);
             break;
           case SortType.TIME:
-            this._daysComponent.remove();
+            remove(this._daysComponent);
             pointsForRender = points.slice().sort((a, b) => {
               return (a.end - a.start) < (b.end - b.start) ? 1 : -1;
             });
             this._renderPreparedPoints(pointsForRender);
             break;
           case SortType.PRICE:
-            this._daysComponent.remove();
+            remove(this._daysComponent);
             pointsForRender = points.slice().sort((a, b) => b.price - a. price);
             this._renderPreparedPoints(pointsForRender);
             break;
         }
       });
     } else {
-      render(this._container, this._noCardsComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._noPointsComponent, RenderPosition.BEFOREEND);
     }
   }
 
   _renderPreparedPoints(points, shouldGroupByDates = false) {
-    this._daysComponent = new Days().getElement();
-    render(this._container, this._daysComponent, RenderPosition.BEFOREEND);
+    render(this._container, this._daysComponent.getElement(), RenderPosition.BEFOREEND);
     if (shouldGroupByDates) {
       points.forEach((date) => {
-        render(this._daysComponent, new Day(date.day).getElement(), RenderPosition.BEFOREEND);
+        render(this._daysComponent.getElement(), new Day(date.day).getElement(), RenderPosition.BEFOREEND);
         const dayElement = this._container.querySelector(`.trip-days__item:nth-child(${date.day.number}) .trip-events__list`);
         date.points.forEach((point) => renderPoint(point, dayElement));
       });
     } else {
-      render(this._daysComponent, new Day(false).getElement(), RenderPosition.BEFOREEND);
+      render(this._daysComponent.getElement(), new Day(false).getElement(), RenderPosition.BEFOREEND);
       const dayElement = this._container.querySelector(`.trip-events__list`);
       points.forEach((point) => renderPoint(point, dayElement));
     }
