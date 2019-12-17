@@ -52,7 +52,7 @@ export default class TripController {
 
     this._tripSortingComponent = new TripSorting();
     this._daysComponent = new Days();
-    this._noPointsComponent = new NoPoints().getElement();
+    this._noPointsComponent = new NoPoints();
   }
 
   render(points) {
@@ -86,7 +86,7 @@ export default class TripController {
         }
       });
     } else {
-      render(this._container, this._noPointsComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._noPointsComponent.getElement(), RenderPosition.BEFOREEND);
     }
   }
 
