@@ -97,7 +97,8 @@ const generatePoint = () => {
       .fill(``)
       .map(getRandomPhoto),
     description: getRandomDescriprion(sentences),
-    price: getRandomNumber(10, 100)
+    price: getRandomNumber(10, 100),
+    favorite: false,
   };
 };
 
