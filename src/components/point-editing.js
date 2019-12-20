@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import AbstractComponent from './abstract-component';
+import SmartAbstractComponent from './smart-abstract-component';
 import {transfers, activities, locations, offers} from '../mock/points';
 import {getPrefix} from '../utils/common';
 
@@ -97,11 +97,13 @@ const createEditPointTemplate = (point) => {
 </form>`;
 };
 
-export default class PointEditing extends AbstractComponent {
+export default class PointEditing extends SmartAbstractComponent {
   constructor(point) {
     super();
 
     this._point = point;
+    this._submitHandler = null;
+    this._favoriteButtonHandler = null;
   }
 
   _getTemplate() {
@@ -109,10 +111,17 @@ export default class PointEditing extends AbstractComponent {
   }
 
   setSubmitHandler(handler) {
+    this._submitHandler = handler;
     this.getElement().addEventListener(`submit`, handler);
   }
 
   setFavoriteButtonHandler(handler) {
+    this._favoriteButtonHandler = handler;
     this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._formHandler);
+    this.setFavoriteButtonHandler(this._favoriteButtonHandler);
   }
 }

@@ -75,8 +75,8 @@ export default class TripController {
     if (index === -1) {
       return;
     }
-    this._points[index] = newObject;
-    controller.render(newObject);
+    this._points = [].concat(this._points.slice(0, index), newObject, this._points.slice(index + 1));
+    controller.render(this._points[index]);
   }
 
   _renderPreparedPoints(points, shouldGroupByDates = false) {

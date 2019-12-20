@@ -6,32 +6,42 @@ export default class PointController {
   constructor(container, onDataChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+
+    this._pointComponent = null;
+    this._pointEditComponent = null;
   }
 
   render(point) {
+    const oldPointComponent = this._pointComponent;
+    const oldPointEditComponent = this._pointEditComponent;
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
-        replace(pointComponent, pointEditComponent);
+        replace(this._pointComponent, this._pointEditComponent);
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
 
-    const pointComponent = new Point(point);
-    const pointEditComponent = new PointEditing(point);
+    this._pointComponent = new Point(point);
+    this._pointEditComponent = new PointEditing(point);
 
-    pointComponent.setRollupButtonClickHandler(() => {
-      replace(pointEditComponent, pointComponent);
+    this._pointComponent.setRollupButtonClickHandler(() => {
+      replace(this._pointEditComponent, this._pointComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-    pointEditComponent.setFavoriteButtonHandler(() => {
+    this._pointEditComponent.setFavoriteButtonHandler(() => {
       this._onDataChange(this, point, Object.assign({}, point, {favorite: !point.favorite}));
     });
 
-    pointEditComponent.setSubmitHandler(() => replace(pointComponent, pointEditComponent));
+    this._pointEditComponent.setSubmitHandler(() => replace(this._pointComponent, this._pointEditComponent));
 
-    render(this._container, pointComponent.getElement(), RenderPosition.BEFOREEND);
+    if (oldPointEditComponent && oldPointComponent) {
+      replace(this._pointComponent, oldPointComponent);
+      replace(this._pointEditComponent, oldPointEditComponent);
+    } else {
+      render(this._container, this._pointComponent.getElement(), RenderPosition.BEFOREEND);
+    }
   }
 }
