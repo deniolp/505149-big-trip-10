@@ -26,6 +26,7 @@ export default class TripController {
   constructor(container) {
     this._container = container;
 
+    this._pointControllers = [];
     this._tripSortingComponent = new TripSorting();
     this._daysComponent = new Days();
     this._noPointsComponent = new NoPoints();
@@ -72,14 +73,20 @@ export default class TripController {
       points.forEach((date) => {
         render(this._daysComponent.getElement(), new Day(date.day).getElement(), RenderPosition.BEFOREEND);
         const dayElement = this._container.querySelector(`.trip-days__item:nth-child(${date.day.number}) .trip-events__list`);
-        const pointController = new PointController(dayElement);
-        date.points.forEach((point) => pointController.render(point));
+        date.points.forEach((point) => {
+          const pointController = new PointController(dayElement);
+          pointController.render(point);
+          this._pointControllers.push(pointController);
+        });
       });
     } else {
       render(this._daysComponent.getElement(), new Day(false).getElement(), RenderPosition.BEFOREEND);
       const dayElement = this._container.querySelector(`.trip-events__list`);
-      const pointController = new PointController(dayElement);
-      points.forEach((point) => pointController.render(point));
+      this._pointControllers = points.map((point) => {
+        const pointController = new PointController(dayElement);
+        pointController.render(point);
+        return pointController;
+      });
     }
   }
 }
