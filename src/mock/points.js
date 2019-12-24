@@ -1,20 +1,21 @@
 import moment from 'moment';
 
 const POINTS_COUNT = 3;
+let id = 0;
 export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
 export const transfers = [
-  `Taxi`,
-  `Bus`,
-  `Train`,
-  `Ship`,
-  `Transport`,
-  `Drive`,
-  `Flight`,
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`,
 ];
 export const activities = [
-  `Check-in`,
-  `Sightseeing`,
-  `Restaurant`,
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
 ];
 export const offers = [
   {
@@ -63,9 +64,9 @@ const shuffleArray = (arr) => {
   return arr;
 };
 
-const getRandomPhoto = () => `http://picsum.photos/300/150?r=${Math.random()}`;
+export const getRandomPhoto = () => `http://picsum.photos/300/150?r=${Math.random()}`;
 
-const getRandomDescriprion = () =>
+export const getRandomDescriprion = () =>
   shuffleArray(sentences)
     .slice(0, getRandomNumber(1, 4))
     .join(` `);
@@ -87,6 +88,7 @@ const generatePoint = () => {
   const end = new Date(firstDate.setHours(firstDate.getHours() + getRandomNumber(1, 3)));
 
   return {
+    id,
     type: getRandomArrayItem(transfers.concat(activities)),
     location: getRandomArrayItem(locations),
     date: moment(start).format(`MMM D`),
@@ -97,11 +99,13 @@ const generatePoint = () => {
       .fill(``)
       .map(getRandomPhoto),
     description: getRandomDescriprion(sentences),
-    price: getRandomNumber(10, 100)
+    price: getRandomNumber(10, 100),
+    favorite: false,
   };
 };
 
 const points = new Array(POINTS_COUNT).fill(``).map((point) => {
+  id = id + 1;
   point = generatePoint();
   return point;
 });

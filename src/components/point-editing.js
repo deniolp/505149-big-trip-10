@@ -1,38 +1,33 @@
 import moment from 'moment';
 
-import AbstractComponent from './abstract-component';
+import SmartAbstractComponent from './smart-abstract-component';
 import {transfers, activities, locations, offers} from '../mock/points';
 import {getPrefix} from '../utils/common';
+import {getRandomDescriprion, getRandomPhoto} from '../mock/points';
 
 const createEditPointTemplate = (point) => {
+  const transfersAndActivities = transfers.concat(activities);
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
     </label>
     <input class="event__type-toggle visually-hidden" id="event-type-toggle-1" type="checkbox">
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Transfer</legend>
-        ${transfers.map((it) => `<div class="event__type-item">
-          <input id="event-type-${it.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.toLowerCase()}">
-          <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-1">${it}</label>
+        ${transfersAndActivities.map((it) => `<div class="event__type-item">
+          <input id="event-type-${it}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
+          <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-1">${it.charAt(0).toUpperCase() + it.slice(1)}</label>
         </div>`).join(``).trim()}
-      </fieldset>
-      <fieldset class="event__type-group">
-        <legend class="visually-hidden">Activity</legend>
-        ${activities.map((it) => `<div class="event__type-item">
-        <input id="event-type-${it.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.toLowerCase()}">
-        <label class="event__type-label event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-1">${it}</label>
-      </div>`).join(``).trim()}
       </fieldset>
     </div>
   </div>
   <div class="event__field-group event__field-group--destination">
     <label class="event__label event__type-output" for="event-destination-1">
-    ${point.type} ${getPrefix(point.type)}
+    ${point.type.charAt(0).toUpperCase() + point.type.slice(1)} ${getPrefix(point.type)}
     </label>
     <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${point.location} list="destination-list-1">
     <datalist id="destination-list-1">
@@ -59,7 +54,7 @@ const createEditPointTemplate = (point) => {
   </div>
   <button class="event__save-btn btn btn--blue" type="submit">Save</button>
   <button class="event__reset-btn" type="reset">Delete</button>
-  <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
+  <input id="event-favorite-1" class="event__favorite-checkbox visually-hidden" type="checkbox" name="event-favorite" ${point.favorite ? `checked` : ``}>
   <label class="event__favorite-btn" for="event-favorite-1">
     <span class="visually-hidden">Add to favorite</span>
     <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -75,7 +70,7 @@ const createEditPointTemplate = (point) => {
     <h3 class="event__section-title event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
       ${offers.map((item) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}"${point.offers.some((it) => it.type === item.type) ? ` checked` : ``}>
+      <input data-type="${item.type}" data-name="${item.name}" data-price="${item.price}" class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${point.offers.some((it) => it.type === item.type) ? ` checked` : ``}>
       <label class="event__offer-label" for="event-offer-${item.type}-1">
         <span class="event__offer-title">${item.name}</span>
         &plus;
@@ -97,18 +92,70 @@ const createEditPointTemplate = (point) => {
 </form>`;
 };
 
-export default class PointEditing extends AbstractComponent {
+export default class PointEditing extends SmartAbstractComponent {
   constructor(point) {
     super();
 
-    this._point = point;
+    this._point = Object.assign({}, point);
+    this._initialPoint = Object.assign({}, point);
+    this._submitHandler = null;
+    this._favoriteClickHandler = null;
+    this._setTransferClickHandlers();
+    this._setDestinationChangeHandler();
+    this._setOfferClickHandler();
   }
 
   _getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
+  _setTransferClickHandlers() {
+    const inputs = this.getElement().querySelectorAll(`.event__type-input`);
+    inputs.forEach((input) => input.addEventListener(`click`, (evt) => {
+      this._point.type = evt.target.value;
+      this.rerender();
+    }));
+  }
+
+  _setDestinationChangeHandler() {
+    const input = this.getElement().querySelector(`.event__input--destination`);
+    input.addEventListener(`select`, (evt) => {
+      this._point.location = evt.target.value;
+      this._point.description = getRandomDescriprion();
+      this._point.photos = Array(5).fill(``).map(getRandomPhoto);
+      this.rerender();
+    });
+  }
+
+  _setOfferClickHandler() {
+    const inputs = this.getElement().querySelectorAll(`.event__offer-checkbox`);
+    inputs.forEach((input) => input.addEventListener(`click`, () => {
+      this._point.offers = Array.from(inputs).map((it) => it.checked && Object.assign({}, it.dataset));
+      this.rerender();
+    }));
+  }
+
   setSubmitHandler(handler) {
-    this.getElement().addEventListener(`submit`, handler);
+    this._submitHandler = handler;
+    this.getElement().addEventListener(`submit`, () => {
+      handler(this._point);
+    });
+  }
+
+  setFavoriteClickHandler(handler) {
+    this._favoriteClickHandler = handler;
+    this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._setTransferClickHandlers();
+    this._setDestinationChangeHandler();
+    this._setOfferClickHandler();
+  }
+
+  reset() {
+    this._point = Object.assign({}, this._initialPoint);
   }
 }
