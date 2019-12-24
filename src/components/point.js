@@ -25,12 +25,12 @@ const createPointTemplate = (point) => {
   </p>
   <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
-    ${point.offers.map((it) => `<li
+    ${point.offers.map((it) => it ? `<li
     class="event__offer">
     <span class="event__offer-title">${it.name}</span>
     &plus;
     &euro;&nbsp;<span class="event__offer-price">${it.price}</span>
-  </li>`).join(``).trim()}
+  </li>` : null).join(``).trim()}
   </ul>
   <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>

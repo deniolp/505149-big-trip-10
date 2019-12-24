@@ -70,7 +70,7 @@ const createEditPointTemplate = (point) => {
     <h3 class="event__section-title event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
       ${offers.map((item) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}"${point.offers.some((it) => it.type === item.type) ? ` checked` : ``}>
+      <input data-type="${item.type}" data-name="${item.name}" data-price="${item.price}" class="event__offer-checkbox visually-hidden" id="event-offer-${item.type}-1" type="checkbox" name="event-offer-${item.type}" ${point.offers.some((it) => it.type === item.type) ? ` checked` : ``}>
       <label class="event__offer-label" for="event-offer-${item.type}-1">
         <span class="event__offer-title">${item.name}</span>
         &plus;
@@ -101,6 +101,7 @@ export default class PointEditing extends SmartAbstractComponent {
     this._favoriteClickHandler = null;
     this._setTransferClickHandlers();
     this._setDestinationChangeHandler();
+    this._setOfferClickHandler();
   }
 
   _getTemplate() {
@@ -133,6 +134,13 @@ export default class PointEditing extends SmartAbstractComponent {
       this._point.photos = Array(5).fill(``).map(getRandomPhoto);
       this.rerender();
     });
+  }
+
+  _setOfferClickHandler() {
+    const inputs = this.getElement().querySelectorAll(`.event__offer-checkbox`);
+    inputs.forEach((input) => input.addEventListener(`click`, () => {
+      this._point.offers = Array.from(inputs).map((it) => it.checked && Object.assign({}, it.dataset));
+    }));
   }
 
   recoveryListeners() {
