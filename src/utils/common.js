@@ -1,4 +1,4 @@
-const activities = [`Check-in`, `Sightseeing`, `Restaurant`];
+const activities = [`check-in`, `sightseeing`, `restaurant`];
 
 const addNullToTime = (time) => {
   return time > 9 ? time : `0` + time;
