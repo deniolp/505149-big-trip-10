@@ -96,7 +96,7 @@ export default class PointEditing extends SmartAbstractComponent {
   constructor(point) {
     super();
 
-    this._point = point;
+    this._point = Object.assign({}, point);
     this._initialPoint = Object.assign({}, point);
     this._submitHandler = null;
     this._favoriteClickHandler = null;
@@ -137,7 +137,9 @@ export default class PointEditing extends SmartAbstractComponent {
 
   setSubmitHandler(handler) {
     this._submitHandler = handler;
-    this.getElement().addEventListener(`submit`, handler);
+    this.getElement().addEventListener(`submit`, () => {
+      handler(this._point);
+    });
   }
 
   setFavoriteClickHandler(handler) {

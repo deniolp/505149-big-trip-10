@@ -31,15 +31,13 @@ export default class PointController {
   render(point) {
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
+
     const onEscKeyDown = (evt) => {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
-        this._pointEditComponent.reset();
-        this._pointEditComponent.rerender();
-        replace(this._pointComponent, this._pointEditComponent);
         document.removeEventListener(`keydown`, onEscKeyDown);
-        this._mode = Mode.DEFAULT;
+        this.setDefaultView();
       }
     };
 
@@ -57,9 +55,10 @@ export default class PointController {
       this._onDataChange(this, point, Object.assign({}, point, {favorite: !point.favorite}));
     });
 
-    this._pointEditComponent.setSubmitHandler(() => {
-      this._onDataChange(this, point, Object.assign({}, point));
+    this._pointEditComponent.setSubmitHandler((newObj) => {
+      this._onDataChange(this, point, newObj);
       replace(this._pointComponent, this._pointEditComponent);
+      document.removeEventListener(`keydown`, onEscKeyDown);
       this._mode = Mode.DEFAULT;
     });
 
