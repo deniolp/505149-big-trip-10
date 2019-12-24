@@ -32,6 +32,7 @@ export default class TripController {
     this._daysComponent = new Days();
     this._noPointsComponent = new NoPoints();
     this._onDataChange = this._onDataChange.bind(this);
+    this._onModeChange = this._onModeChange.bind(this);
   }
 
   render(points) {
@@ -79,6 +80,10 @@ export default class TripController {
     controller.render(this._points[index]);
   }
 
+  _onModeChange() {
+    this._pointControllers.forEach((it) => it.setDefaultView());
+  }
+
   _renderPreparedPoints(points, shouldGroupByDates = false) {
     render(this._container, this._daysComponent.getElement(), RenderPosition.BEFOREEND);
     if (shouldGroupByDates) {
@@ -86,7 +91,7 @@ export default class TripController {
         render(this._daysComponent.getElement(), new Day(date.day).getElement(), RenderPosition.BEFOREEND);
         const dayElement = this._container.querySelector(`.trip-days__item:nth-child(${date.day.number}) .trip-events__list`);
         date.points.forEach((point) => {
-          const pointController = new PointController(dayElement, this._onDataChange);
+          const pointController = new PointController(dayElement, this._onDataChange, this._onModeChange);
           pointController.render(point);
           this._pointControllers.push(pointController);
         });
@@ -95,7 +100,7 @@ export default class TripController {
       render(this._daysComponent.getElement(), new Day(false).getElement(), RenderPosition.BEFOREEND);
       const dayElement = this._container.querySelector(`.trip-events__list`);
       this._pointControllers = points.map((point) => {
-        const pointController = new PointController(dayElement, this._onDataChange);
+        const pointController = new PointController(dayElement, this._onDataChange, this._onModeChange);
         pointController.render(point);
         return pointController;
       });

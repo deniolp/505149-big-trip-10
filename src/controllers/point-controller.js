@@ -2,13 +2,27 @@ import Point from '../components/point';
 import PointEditing from '../components/point-editing';
 import {render, RenderPosition, replace} from '../utils/render';
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
 export default class PointController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onModeChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onModeChange = onModeChange;
+
+    this._mode = Mode.DEFAULT;
 
     this._pointComponent = null;
     this._pointEditComponent = null;
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      replace(this._pointComponent, this._pointEditComponent);
+    }
   }
 
   render(point) {
@@ -20,6 +34,7 @@ export default class PointController {
       if (isEscKey) {
         replace(this._pointComponent, this._pointEditComponent);
         document.removeEventListener(`keydown`, onEscKeyDown);
+        this._mode = Mode.DEFAULT;
       }
     };
 
@@ -27,8 +42,10 @@ export default class PointController {
     this._pointEditComponent = new PointEditing(point);
 
     this._pointComponent.setRollupButtonClickHandler(() => {
+      this._onModeChange();
       replace(this._pointEditComponent, this._pointComponent);
       document.addEventListener(`keydown`, onEscKeyDown);
+      this._mode = Mode.EDIT;
     });
 
     this._pointEditComponent.setFavoriteClickHandler(() => {
@@ -38,6 +55,7 @@ export default class PointController {
     this._pointEditComponent.setSubmitHandler(() => {
       this._onDataChange(this, point, Object.assign({}, point));
       replace(this._pointComponent, this._pointEditComponent);
+      this._mode = Mode.DEFAULT;
     });
 
     if (oldPointEditComponent && oldPointComponent) {
