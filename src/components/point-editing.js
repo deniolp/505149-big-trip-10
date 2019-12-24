@@ -97,6 +97,7 @@ export default class PointEditing extends SmartAbstractComponent {
     super();
 
     this._point = point;
+    this._initialPoint = Object.assign({}, point);
     this._submitHandler = null;
     this._favoriteClickHandler = null;
     this._setTransferClickHandlers();
@@ -106,16 +107,6 @@ export default class PointEditing extends SmartAbstractComponent {
 
   _getTemplate() {
     return createEditPointTemplate(this._point);
-  }
-
-  setSubmitHandler(handler) {
-    this._submitHandler = handler;
-    this.getElement().addEventListener(`submit`, handler);
-  }
-
-  setFavoriteClickHandler(handler) {
-    this._favoriteClickHandler = handler;
-    this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`click`, handler);
   }
 
   _setTransferClickHandlers() {
@@ -140,7 +131,18 @@ export default class PointEditing extends SmartAbstractComponent {
     const inputs = this.getElement().querySelectorAll(`.event__offer-checkbox`);
     inputs.forEach((input) => input.addEventListener(`click`, () => {
       this._point.offers = Array.from(inputs).map((it) => it.checked && Object.assign({}, it.dataset));
+      this.rerender();
     }));
+  }
+
+  setSubmitHandler(handler) {
+    this._submitHandler = handler;
+    this.getElement().addEventListener(`submit`, handler);
+  }
+
+  setFavoriteClickHandler(handler) {
+    this._favoriteClickHandler = handler;
+    this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`click`, handler);
   }
 
   recoveryListeners() {
@@ -148,5 +150,10 @@ export default class PointEditing extends SmartAbstractComponent {
     this.setFavoriteClickHandler(this._favoriteClickHandler);
     this._setTransferClickHandlers();
     this._setDestinationChangeHandler();
+    this._setOfferClickHandler();
+  }
+
+  reset() {
+    this._point = Object.assign({}, this._initialPoint);
   }
 }

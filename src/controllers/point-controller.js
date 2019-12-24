@@ -21,7 +21,10 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
+      this._pointEditComponent.reset();
+      this._pointEditComponent.rerender();
       replace(this._pointComponent, this._pointEditComponent);
+      this._mode = Mode.DEFAULT;
     }
   }
 
@@ -32,6 +35,8 @@ export default class PointController {
       const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
       if (isEscKey) {
+        this._pointEditComponent.reset();
+        this._pointEditComponent.rerender();
         replace(this._pointComponent, this._pointEditComponent);
         document.removeEventListener(`keydown`, onEscKeyDown);
         this._mode = Mode.DEFAULT;
