@@ -3,18 +3,18 @@ import moment from 'moment';
 const POINTS_COUNT = 3;
 export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
 export const transfers = [
-  `Taxi`,
-  `Bus`,
-  `Train`,
-  `Ship`,
-  `Transport`,
-  `Drive`,
-  `Flight`,
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`,
 ];
 export const activities = [
-  `Check-in`,
-  `Sightseeing`,
-  `Restaurant`,
+  `check-in`,
+  `sightseeing`,
+  `restaurant`,
 ];
 export const offers = [
   {

@@ -31,11 +31,14 @@ export default class PointController {
       document.addEventListener(`keydown`, onEscKeyDown);
     });
 
-    this._pointEditComponent.setFavoriteButtonHandler(() => {
+    this._pointEditComponent.setFavoriteClickHandler(() => {
       this._onDataChange(this, point, Object.assign({}, point, {favorite: !point.favorite}));
     });
 
-    this._pointEditComponent.setSubmitHandler(() => replace(this._pointComponent, this._pointEditComponent));
+    this._pointEditComponent.setSubmitHandler(() => {
+      this._onDataChange(this, point, Object.assign({}, point));
+      replace(this._pointComponent, this._pointEditComponent);
+    });
 
     if (oldPointEditComponent && oldPointComponent) {
       replace(this._pointComponent, oldPointComponent);

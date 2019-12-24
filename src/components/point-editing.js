@@ -5,34 +5,28 @@ import {transfers, activities, locations, offers} from '../mock/points';
 import {getPrefix} from '../utils/common';
 
 const createEditPointTemplate = (point) => {
+  const transfersAndActivities = transfers.concat(activities);
   return `<form class="event event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
     </label>
     <input class="event__type-toggle visually-hidden" id="event-type-toggle-1" type="checkbox">
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Transfer</legend>
-        ${transfers.map((it) => `<div class="event__type-item">
-          <input id="event-type-${it.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.toLowerCase()}">
-          <label class="event__type-label  event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-1">${it}</label>
+        ${transfersAndActivities.map((it) => `<div class="event__type-item">
+          <input id="event-type-${it}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it}">
+          <label class="event__type-label  event__type-label--${it}" for="event-type-${it}-1">${it.charAt(0).toUpperCase() + it.slice(1)}</label>
         </div>`).join(``).trim()}
-      </fieldset>
-      <fieldset class="event__type-group">
-        <legend class="visually-hidden">Activity</legend>
-        ${activities.map((it) => `<div class="event__type-item">
-        <input id="event-type-${it.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${it.toLowerCase()}">
-        <label class="event__type-label event__type-label--${it.toLowerCase()}" for="event-type-${it.toLowerCase()}-1">${it}</label>
-      </div>`).join(``).trim()}
       </fieldset>
     </div>
   </div>
   <div class="event__field-group event__field-group--destination">
     <label class="event__label event__type-output" for="event-destination-1">
-    ${point.type} ${getPrefix(point.type)}
+    ${point.type.charAt(0).toUpperCase() + point.type.slice(1)} ${getPrefix(point.type)}
     </label>
     <input class="event__input event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${point.location} list="destination-list-1">
     <datalist id="destination-list-1">
@@ -103,7 +97,8 @@ export default class PointEditing extends SmartAbstractComponent {
 
     this._point = point;
     this._submitHandler = null;
-    this._favoriteButtonHandler = null;
+    this._favoriteClickHandler = null;
+    this._setTransferClickHandlers();
   }
 
   _getTemplate() {
@@ -115,13 +110,22 @@ export default class PointEditing extends SmartAbstractComponent {
     this.getElement().addEventListener(`submit`, handler);
   }
 
-  setFavoriteButtonHandler(handler) {
-    this._favoriteButtonHandler = handler;
+  setFavoriteClickHandler(handler) {
+    this._favoriteClickHandler = handler;
     this.getElement().querySelector(`.event__favorite-checkbox`).addEventListener(`click`, handler);
   }
 
+  _setTransferClickHandlers() {
+    const inputs = this.getElement().querySelectorAll(`.event__type-input`);
+    inputs.forEach((input) => input.addEventListener(`click`, (evt) => {
+      this._point.type = (evt.target.value);
+      this.rerender();
+    }));
+  }
+
   recoveryListeners() {
-    this.setSubmitHandler(this._formHandler);
-    this.setFavoriteButtonHandler(this._favoriteButtonHandler);
+    this.setSubmitHandler(this._submitHandler);
+    this.setFavoriteClickHandler(this._favoriteClickHandler);
+    this._setTransferClickHandlers();
   }
 }

@@ -9,9 +9,9 @@ const createPointTemplate = (point) => {
   return `<li class="trip-events__item">
 <div class="event">
   <div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
+    <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type}.png" alt="Event type icon">
   </div>
-  <h3 class="event__title">${point.type} ${getPrefix(point.type)} ${point.location}</h3>
+  <h3 class="event__title">${point.type.charAt(0).toUpperCase() + point.type.slice(1)} ${getPrefix(point.type)} ${point.location}</h3>
   <div class="event__schedule">
     <p class="event__time">
       <time class="event__start-time" datetime=${point.start}>${moment(point.start).format(`HH:MM`)}</time>
