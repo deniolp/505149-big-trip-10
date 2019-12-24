@@ -63,9 +63,9 @@ const shuffleArray = (arr) => {
   return arr;
 };
 
-const getRandomPhoto = () => `http://picsum.photos/300/150?r=${Math.random()}`;
+export const getRandomPhoto = () => `http://picsum.photos/300/150?r=${Math.random()}`;
 
-const getRandomDescriprion = () =>
+export const getRandomDescriprion = () =>
   shuffleArray(sentences)
     .slice(0, getRandomNumber(1, 4))
     .join(` `);

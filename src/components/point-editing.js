@@ -3,6 +3,7 @@ import moment from 'moment';
 import SmartAbstractComponent from './smart-abstract-component';
 import {transfers, activities, locations, offers} from '../mock/points';
 import {getPrefix} from '../utils/common';
+import {getRandomDescriprion, getRandomPhoto} from '../mock/points';
 
 const createEditPointTemplate = (point) => {
   const transfersAndActivities = transfers.concat(activities);
@@ -99,6 +100,7 @@ export default class PointEditing extends SmartAbstractComponent {
     this._submitHandler = null;
     this._favoriteClickHandler = null;
     this._setTransferClickHandlers();
+    this._setDestinationChangeHandler();
   }
 
   _getTemplate() {
@@ -118,14 +120,25 @@ export default class PointEditing extends SmartAbstractComponent {
   _setTransferClickHandlers() {
     const inputs = this.getElement().querySelectorAll(`.event__type-input`);
     inputs.forEach((input) => input.addEventListener(`click`, (evt) => {
-      this._point.type = (evt.target.value);
+      this._point.type = evt.target.value;
       this.rerender();
     }));
+  }
+
+  _setDestinationChangeHandler() {
+    const input = this.getElement().querySelector(`.event__input--destination`);
+    input.addEventListener(`select`, (evt) => {
+      this._point.location = evt.target.value;
+      this._point.description = getRandomDescriprion();
+      this._point.photos = Array(5).fill(``).map(getRandomPhoto);
+      this.rerender();
+    });
   }
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
     this.setFavoriteClickHandler(this._favoriteClickHandler);
     this._setTransferClickHandlers();
+    this._setDestinationChangeHandler();
   }
 }
