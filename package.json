@@ -13,6 +13,7 @@
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
     "moment": "2.24.0",
+    "moment-locales-webpack-plugin": "1.1.2",
     "stylelint-config-htmlacademy": "0.1.4",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
