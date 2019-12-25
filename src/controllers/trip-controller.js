@@ -48,7 +48,7 @@ export default class TripController {
 
       this._renderPreparedPoints(groupPointsByDate(this._points));
 
-      this._tripSortingComponent.setSortTypeChangeHandler((sortType) => {
+      this._tripSortingComponent.setSortTypeChangeHandler((sortType = SortType.EVENT) => {
         switch (sortType) {
           case SortType.EVENT:
             remove(this._daysComponent);
@@ -73,7 +73,7 @@ export default class TripController {
     }
   }
 
-  _onDataChange(controller, oldObject, newObject) {
+  _onDataChange(oldObject, newObject) {
     const index = this._points.findIndex((object) => object === oldObject);
     if (index === -1) {
       return;

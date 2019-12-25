@@ -41,12 +41,12 @@ const createEditPointTemplate = (point) => {
     <label class="visually-hidden" for="event-start-time-1">
       From
     </label>
-    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(point.start).format(`DD/MM/YYYY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(point.start).format(`DD/MM/YYYY&#160;HH:mm`)}>
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">
       To
     </label>
-    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(point.end).format(`DD/MM/YYYY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(point.end).format(`DD/MM/YYYY&#160;HH:mm`)}>
   </div>
   <div class="event__field-group event__field-group--price">
     <label class="event__label" for="event-price-1">

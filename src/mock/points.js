@@ -76,9 +76,9 @@ const getRandomNumber = (min, max) => {
 const getRandomArrayItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getDate = (start, end) => {
-  return new Date(start.getTime() + Math.random() * (start.getTime() - end.getTime()));
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
-let firstDate = getDate(new Date(2019, 12, 10), new Date(2020, 2, 15));
+let firstDate = getDate(new Date(2019, 12, 25), new Date(2020, 3, 15));
 
 const generatePoint = () => {
   const start = firstDate;

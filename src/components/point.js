@@ -14,9 +14,9 @@ const createPointTemplate = (point) => {
   <h3 class="event__title">${point.type.charAt(0).toUpperCase() + point.type.slice(1)} ${getPrefix(point.type)} ${point.location}</h3>
   <div class="event__schedule">
     <p class="event__time">
-      <time class="event__start-time" datetime=${point.start}>${moment(point.start).format(`HH:MM`)}</time>
+      <time class="event__start-time" datetime=${point.start}>${moment(point.start).format(`HH:mm`)}</time>
       &mdash;
-      <time class="event__end-time" datetime=${point.end}>${moment(point.end).format(`HH:MM`)}</time>
+      <time class="event__end-time" datetime=${point.end}>${moment(point.end).format(`HH:mm`)}</time>
     </p>
     <p class="event__duration">${getDiff(diffTime)}</p>
   </div>
