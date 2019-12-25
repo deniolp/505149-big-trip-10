@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const POINTS_COUNT = 3;
 let id = 0;
 export const locations = [`Amsterdam`, `Geneva`, `Berlin`, `Moscow`, `Airport`];
@@ -91,7 +89,7 @@ const generatePoint = () => {
     id,
     type: getRandomArrayItem(transfers.concat(activities)),
     location: getRandomArrayItem(locations),
-    date: moment(start).format(`MMM D`),
+    date: start,
     start,
     end,
     offers: offers.slice().splice(getRandomNumber(0, 4), getRandomNumber(0, 4)),

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import Info from '../components/info';
 import TripSorting, {SortType} from '../components/sortings';
 import NoPoints from '../components/no-points';
@@ -7,8 +9,8 @@ import PointController from '../controllers/point-controller';
 import {render, RenderPosition, remove} from '../utils/render';
 
 const groupPointsByDate = (items) => {
-  const pointDates = Array.from(new Set(items.map((point) => {
-    return point.date;
+  const pointDates = Array.from(new Set(items.slice().sort((a, b) => a.date - b.date).map((point) => {
+    return moment(point.date).format(`MMM D`);
   })));
 
   return pointDates.map((pointDate, i) => {
@@ -17,7 +19,7 @@ const groupPointsByDate = (items) => {
         number: i + 1,
         date: pointDate,
       },
-      points: items.filter((point) => point.date === pointDate)
+      points: items.filter((point) => moment(point.date).format(`MMM D`) === pointDate)
     };
   });
 };
@@ -44,25 +46,25 @@ export default class TripController {
       render(infoContainer, new Info(this._points).getElement(), RenderPosition.AFTERBEGIN);
       render(this._container, this._tripSortingComponent.getElement(), RenderPosition.BEFOREEND);
 
-      this._renderPreparedPoints(groupPointsByDate(this._points), true);
+      this._renderPreparedPoints(groupPointsByDate(this._points));
 
       this._tripSortingComponent.setSortTypeChangeHandler((sortType) => {
         switch (sortType) {
           case SortType.EVENT:
             remove(this._daysComponent);
-            this._renderPreparedPoints(groupPointsByDate(this._points), true);
+            this._renderPreparedPoints(groupPointsByDate(this._points));
             break;
           case SortType.TIME:
             remove(this._daysComponent);
             pointsForRender = this._points.slice().sort((a, b) => {
               return (a.end - a.start) < (b.end - b.start) ? 1 : -1;
             });
-            this._renderPreparedPoints(pointsForRender);
+            this._renderPreparedPoints(pointsForRender, false);
             break;
           case SortType.PRICE:
             remove(this._daysComponent);
             pointsForRender = this._points.slice().sort((a, b) => b.price - a. price);
-            this._renderPreparedPoints(pointsForRender);
+            this._renderPreparedPoints(pointsForRender, false);
             break;
         }
       });
@@ -77,14 +79,15 @@ export default class TripController {
       return;
     }
     this._points = [].concat(this._points.slice(0, index), newObject, this._points.slice(index + 1));
-    controller.render(this._points[index]);
+    remove(this._daysComponent);
+    this._renderPreparedPoints(groupPointsByDate(this._points));
   }
 
   _onModeChange() {
     this._pointControllers.forEach((it) => it.setDefaultView());
   }
 
-  _renderPreparedPoints(points, shouldGroupByDates = false) {
+  _renderPreparedPoints(points, shouldGroupByDates = true) {
     render(this._container, this._daysComponent.getElement(), RenderPosition.BEFOREEND);
     if (shouldGroupByDates) {
       points.forEach((date) => {
