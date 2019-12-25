@@ -1,4 +1,7 @@
 import moment from 'moment';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 import SmartAbstractComponent from './smart-abstract-component';
 import {transfers, activities, locations, offers} from '../mock/points';
@@ -100,9 +103,11 @@ export default class PointEditing extends SmartAbstractComponent {
     this._initialPoint = Object.assign({}, point);
     this._submitHandler = null;
     this._favoriteClickHandler = null;
+    this._flatpickr = null;
     this._setTransferClickHandlers();
     this._setDestinationChangeHandler();
     this._setOfferClickHandler();
+    this._applyFlatpickr();
   }
 
   _getTemplate() {
@@ -133,6 +138,31 @@ export default class PointEditing extends SmartAbstractComponent {
       this._point.offers = Array.from(inputs).map((it) => it.checked && Object.assign({}, it.dataset));
       this.rerender();
     }));
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+
+    this._flatpickr = flatpickr(startDateElement, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._point.start,
+      format: `d/m/Y H:i`,
+      altFormat: `d/m/Y H:i`
+    });
+    this._flatpickr = flatpickr(endDateElement, {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._point.end,
+      format: `d/m/Y H:i`,
+      altFormat: `d/m/Y H:i`
+    });
   }
 
   setSubmitHandler(handler) {
