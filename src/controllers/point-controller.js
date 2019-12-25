@@ -52,11 +52,11 @@ export default class PointController {
     });
 
     this._pointEditComponent.setFavoriteClickHandler(() => {
-      this._onDataChange(this, point, Object.assign({}, point, {favorite: !point.favorite}));
+      this._onDataChange(point, Object.assign({}, point, {favorite: !point.favorite}));
     });
 
     this._pointEditComponent.setSubmitHandler((newObj) => {
-      this._onDataChange(this, point, newObj);
+      this._onDataChange(point, newObj);
       replace(this._pointComponent, this._pointEditComponent);
       document.removeEventListener(`keydown`, onEscKeyDown);
       this._mode = Mode.DEFAULT;

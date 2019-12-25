@@ -1,4 +1,7 @@
 import moment from 'moment';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 import SmartAbstractComponent from './smart-abstract-component';
 import {transfers, activities, locations, offers} from '../mock/points';
@@ -38,12 +41,12 @@ const createEditPointTemplate = (point) => {
     <label class="visually-hidden" for="event-start-time-1">
       From
     </label>
-    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(point.start).format(`DD/MM/YY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${moment(point.start).format(`DD/MM/YYYY&#160;HH:mm`)}>
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">
       To
     </label>
-    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(point.end).format(`DD/MM/YY&#160;HH:MM`)}>
+    <input class="event__input event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${moment(point.end).format(`DD/MM/YYYY&#160;HH:mm`)}>
   </div>
   <div class="event__field-group event__field-group--price">
     <label class="event__label" for="event-price-1">
@@ -100,9 +103,12 @@ export default class PointEditing extends SmartAbstractComponent {
     this._initialPoint = Object.assign({}, point);
     this._submitHandler = null;
     this._favoriteClickHandler = null;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
     this._setTransferClickHandlers();
     this._setDestinationChangeHandler();
     this._setOfferClickHandler();
+    this._applyFlatpickr();
   }
 
   _getTemplate() {
@@ -114,6 +120,7 @@ export default class PointEditing extends SmartAbstractComponent {
     inputs.forEach((input) => input.addEventListener(`click`, (evt) => {
       this._point.type = evt.target.value;
       this.rerender();
+      this._applyFlatpickr();
     }));
   }
 
@@ -124,6 +131,7 @@ export default class PointEditing extends SmartAbstractComponent {
       this._point.description = getRandomDescriprion();
       this._point.photos = Array(5).fill(``).map(getRandomPhoto);
       this.rerender();
+      this._applyFlatpickr();
     });
   }
 
@@ -132,12 +140,52 @@ export default class PointEditing extends SmartAbstractComponent {
     inputs.forEach((input) => input.addEventListener(`click`, () => {
       this._point.offers = Array.from(inputs).map((it) => it.checked && Object.assign({}, it.dataset));
       this.rerender();
+      this._applyFlatpickr();
     }));
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+      this._flatpickrEnd = null;
+    }
+
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+    this._flatpickrStart = flatpickr(startDateElement, {
+      enableTime: true,
+      altInput: true,
+      altFormat: `d/m/Y H:i`,
+      format: `d/m/Y H:i`,
+      [`time_24hr`]: true,
+      minuteIncrement: 1,
+      defaultDate: this._point.start,
+      onChange: (selectedDate) => {
+        this._point.start = selectedDate[0];
+        this._point.date = selectedDate[0];
+      },
+    });
+
+    this._flatpickrEnd = flatpickr(endDateElement, {
+      enableTime: true,
+      altInput: true,
+      altFormat: `d/m/Y H:i`,
+      format: `d/m/Y H:i`,
+      [`time_24hr`]: true,
+      minuteIncrement: 1,
+      defaultDate: this._point.end,
+      onChange: (selectedDate) => {
+        this._point.end = selectedDate[0];
+      },
+    });
   }
 
   setSubmitHandler(handler) {
     this._submitHandler = handler;
-    this.getElement().addEventListener(`submit`, () => {
+    this.getElement().addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
       handler(this._point);
     });
   }
