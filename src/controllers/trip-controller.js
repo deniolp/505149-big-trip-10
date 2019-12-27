@@ -26,8 +26,9 @@ const groupPointsByDate = (items) => {
 };
 
 export default class TripController {
-  constructor(container) {
+  constructor(container, pointsModel) {
     this._container = container;
+    this._pointsModel = pointsModel;
 
     this._points = [];
     this._pointControllers = [];
@@ -38,8 +39,8 @@ export default class TripController {
     this._onModeChange = this._onModeChange.bind(this);
   }
 
-  render(points) {
-    this._points = points;
+  render() {
+    this._points = this._pointsModel.getPoints();
     const infoContainer = document.querySelector(`.trip-info`);
 
     if (this._points.length) {
@@ -76,18 +77,17 @@ export default class TripController {
   }
 
   _onDataChange(oldObject, newObject) {
-    const index = this._points.findIndex((object) => object === oldObject);
-    if (index === -1) {
-      return;
+    const isSuccess = this._pointsModel.updatePoint(oldObject.id, newObject);
+    if (isSuccess) {
+      this._points = this._pointsModel.getPoints();
+      remove(this._daysComponent);
+      const groupedByDates = groupPointsByDate(this._points);
+      this._renderPreparedPoints(groupedByDates);
+      const infoContainer = document.querySelector(`.trip-info`);
+      infoContainer.innerHTML = ``;
+      render(infoContainer, new Info(groupedByDates).getElement(), RenderPosition.AFTERBEGIN);
+      render(infoContainer, new TotalCost(this._points).getElement(), RenderPosition.BEFOREEND);
     }
-    this._points = [].concat(this._points.slice(0, index), newObject, this._points.slice(index + 1));
-    remove(this._daysComponent);
-    const groupedByDates = groupPointsByDate(this._points);
-    this._renderPreparedPoints(groupedByDates);
-    const infoContainer = document.querySelector(`.trip-info`);
-    infoContainer.innerHTML = ``;
-    render(infoContainer, new Info(groupedByDates).getElement(), RenderPosition.AFTERBEGIN);
-    render(infoContainer, new TotalCost(this._points).getElement(), RenderPosition.BEFOREEND);
   }
 
   _onModeChange() {

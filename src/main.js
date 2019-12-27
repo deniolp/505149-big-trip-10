@@ -17,6 +17,6 @@ render(controlsElement, new Filters(filters).getElement(), RenderPosition.BEFORE
 const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
-const tripController = new TripController(eventsElement);
+const tripController = new TripController(eventsElement, pointsModel);
 
-tripController.render(points);
+tripController.render();
