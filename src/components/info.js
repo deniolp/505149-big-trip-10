@@ -1,16 +1,15 @@
-import moment from 'moment';
-
 import AbstractComponent from './abstract-component';
 
-const createInfoTemplate = (points) => {
-  const firstDate = `${moment(points[0].start).format(`MMM DD`)}`;
-  const latsDate = points[0].start.getMonth() === points[points.length - 1].end.getMonth() ? moment(points[points.length - 1].end).format(`DD`) : moment(points[points.length - 1].end).format(`MMM DD`);
-  const firstCity = points[0].location;
-  const lastCity = points[points.length - 1].location;
+const createInfoTemplate = (items) => {
+  const firstDate = items[0].day.date;
+  const lastDate = items[items.length - 1].day.date;
+  const firstCity = items[0].points[0].location;
+  const lastDatePoints = items[items.length - 1].points;
+  const lastCity = lastDatePoints[lastDatePoints.length - 1].location;
 
   return `<div class="trip-info__main">
   <h1 class="trip-info__title">${firstCity} &mdash; ... &mdash; ${lastCity}</h1>
-  <p class="trip-info__dates">${firstDate}&nbsp;&mdash;&nbsp;${latsDate}</p>
+  <p class="trip-info__dates">${firstDate}&nbsp;&mdash;&nbsp;${lastDate}</p>
   </div>`;
 };
 

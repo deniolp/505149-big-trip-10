@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 import Info from '../components/info';
+import TotalCost from '../components/total-cost';
 import TripSorting, {SortType} from '../components/sortings';
 import NoPoints from '../components/no-points';
 import Days from '../components/days';
@@ -43,7 +44,8 @@ export default class TripController {
 
     if (this._points.length) {
       let pointsForRender = [];
-      render(infoContainer, new Info(this._points).getElement(), RenderPosition.AFTERBEGIN);
+      render(infoContainer, new Info(groupPointsByDate(this._points)).getElement(), RenderPosition.AFTERBEGIN);
+      render(infoContainer, new TotalCost(this._points).getElement(), RenderPosition.BEFOREEND);
       render(this._container, this._tripSortingComponent.getElement(), RenderPosition.BEFOREEND);
 
       this._renderPreparedPoints(groupPointsByDate(this._points));
@@ -80,7 +82,12 @@ export default class TripController {
     }
     this._points = [].concat(this._points.slice(0, index), newObject, this._points.slice(index + 1));
     remove(this._daysComponent);
-    this._renderPreparedPoints(groupPointsByDate(this._points));
+    const groupedByDates = groupPointsByDate(this._points);
+    this._renderPreparedPoints(groupedByDates);
+    const infoContainer = document.querySelector(`.trip-info`);
+    infoContainer.innerHTML = ``;
+    render(infoContainer, new Info(groupedByDates).getElement(), RenderPosition.AFTERBEGIN);
+    render(infoContainer, new TotalCost(this._points).getElement(), RenderPosition.BEFOREEND);
   }
 
   _onModeChange() {
